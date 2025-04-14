@@ -1,21 +1,33 @@
 <!DOCTYPE html>
-  <br lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Quote Generator</title>
-  </head>
-  <br>
-    <h1>Dynamic Quote Generator</h1>
-    <div id="quoteDisplay"></div>
-    <br></br>
-    <button id="newQuote">Show New Quote</button>
-  <br></br>
-    <div>
-        <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
-        <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
-        <button id="addQuote">Add Quote</button>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dynamic Quote Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-4">
+
+  <h1 class="text-2xl font-bold text-center mb-4">🎯 Dynamic Quote Generator</h1>
+
+  <div class="flex flex-col items-center gap-4">
+    <div id="quoteDisplay" class="text-lg font-medium text-center bg-white p-4 rounded shadow w-full max-w-xl"></div>
+
+    <button id="newQuote" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Show New Quote</button>
+
+    <div class="bg-white p-4 rounded shadow w-full max-w-xl">
+      <h2 class="text-lg font-semibold mb-2">Add New Quote</h2>
+      <input id="newQuoteText" class="border p-2 w-full mb-2 rounded" type="text" placeholder="Enter a new quote" />
+      <input id="newQuoteCategory" class="border p-2 w-full mb-2 rounded" type="text" placeholder="Enter quote category" />
+      <button onclick="addQuote()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Add Quote</button>
     </div>
-    <script src="script.js"></script>
-  </body>
-  </html>
+
+    <div class="flex flex-col gap-2 w-full max-w-xl mt-4">
+      <button onclick="exportToJsonFile()" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Export Quotes to JSON</button>
+      <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" class="border p-2 rounded" />
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
