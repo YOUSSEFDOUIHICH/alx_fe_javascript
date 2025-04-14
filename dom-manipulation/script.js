@@ -1,94 +1,45 @@
-// Initialisation des citations avec récupération du Local Storage
-let quotes = JSON.parse(localStorage.getItem("quotes")) || [
-    { text: "The best way to predict the future is to create it.", category: "Motivation" },
-    { text: "Do what you can, with what you have, where you are.", category: "Inspiration" }
-];
-
-// Sélection des éléments DOM
-const quoteDisplay = document.getElementById("quoteDisplay");
-const newQuoteButton = document.getElementById("newQuote");
-const addQuoteButton = document.getElementById("addQuote");
-const newQuoteText = document.getElementById("newQuoteText");
-const newQuoteCategory = document.getElementById("newQuoteCategory");
-const exportJsonButton = document.getElementById("exportJson");
-const importFileInput = document.getElementById("importFile");
-
-// Fonction pour afficher une citation aléatoire
-function showRandomQuote() {
+let quotes = [
+    { text: "The only limit to our realization of tomorrow is our doubts of today.", category: "Motivation" },
+    { text: "Creativity is intelligence having fun.", category: "Inspiration" },
+    { text: "Do not wait for opportunity. Create it.", category: "Motivation" }
+  ];
+  
+  // Affiche une citation aléatoire
+  function showRandomQuote() {
+    const quoteDisplay = document.getElementById('quoteDisplay');
     if (quotes.length === 0) {
-        quoteDisplay.innerText = "No quotes available.";
-        return;
+      quoteDisplay.innerHTML = "<p>No quotes available.</p>";
+      return;
     }
     const randomIndex = Math.floor(Math.random() * quotes.length);
-    const randomQuote = quotes[randomIndex];
-    quoteDisplay.innerText = `"${randomQuote.text}" - ${randomQuote.category}`;
-    
-    // Stocker la dernière citation affichée en Session Storage
-    sessionStorage.setItem("lastQuote", JSON.stringify(randomQuote));
-}
-
-// Fonction pour ajouter une nouvelle citation
-function addQuote() {
-    const text = newQuoteText.value.trim();
-    const category = newQuoteCategory.value.trim();
-
-    if (!text || !category) {
-        alert("Please enter both a quote and a category.");
-        return;
+    const quote = quotes[randomIndex];
+    quoteDisplay.innerHTML = `
+      <p><strong>${quote.category}:</strong> "${quote.text}"</p>
+    `;
+  }
+  
+  // Crée le formulaire pour ajouter une nouvelle citation (si besoin dynamique)
+  // Ici on utilise un formulaire statique dans l'HTML, donc on n’utilise pas createAddQuoteForm
+  
+  // Ajoute une citation à la liste
+  function addQuote() {
+    const quoteText = document.getElementById('newQuoteText').value.trim();
+    const quoteCategory = document.getElementById('newQuoteCategory').value.trim();
+  
+    if (!quoteText || !quoteCategory) {
+      alert("Please fill in both fields.");
+      return;
     }
-
-    const newQuote = { text, category };
-    quotes.push(newQuote);
-    saveQuotes();
-    
-    newQuoteText.value = "";
-    newQuoteCategory.value = "";
+  
+    quotes.push({ text: quoteText, category: quoteCategory });
     alert("Quote added successfully!");
-}
-
-// Fonction pour enregistrer les citations dans Local Storage
-function saveQuotes() {
-    localStorage.setItem("quotes", JSON.stringify(quotes));
-}
-
-// Fonction pour exporter les citations en JSON
-function exportToJsonFile() {
-    const blob = new Blob([JSON.stringify(quotes, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "quotes.json";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-}
-
-// Fonction pour importer un fichier JSON
-function importFromJsonFile(event) {
-    const fileReader = new FileReader();
-    fileReader.onload = function(event) {
-        try {
-            const importedQuotes = JSON.parse(event.target.result);
-            quotes.push(...importedQuotes);
-            saveQuotes();
-            alert("Quotes imported successfully!");
-        } catch (error) {
-            alert("Invalid JSON format.");
-        }
-    };
-    fileReader.readAsText(event.target.files[0]);
-}
-
-// Charger la dernière citation affichée depuis Session Storage (si disponible)
-const lastQuote = JSON.parse(sessionStorage.getItem("lastQuote"));
-if (lastQuote) {
-    quoteDisplay.innerText = `"${lastQuote.text}" - ${lastQuote.category}`;
-}
-
-// Ajouter les Event Listeners
-document.addEventListener("DOMContentLoaded", showRandomQuote);
-newQuoteButton.addEventListener("click", showRandomQuote);
-addQuoteButton.addEventListener("click", addQuote);
-exportJsonButton.addEventListener("click", exportToJsonFile);
-importFileInput.addEventListener("change", importFromJsonFile);
+    document.getElementById('newQuoteText').value = "";
+    document.getElementById('newQuoteCategory').value = "";
+  }
+  
+  // Événements
+  document.getElementById('newQuote').addEventListener('click', showRandomQuote);
+  document.getElementById('addQuoteButton').addEventListener('click', addQuote);
+  
+  // Affiche une citation dès le chargement
+  showRandomQuote();
